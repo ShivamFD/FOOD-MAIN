@@ -66,6 +66,14 @@ const router = createBrowserRouter([
         element: <RegisterPage />
       },
       {
+        path: '/menu',
+        element: <MenuPage />
+      },
+      {
+        path: '/menu/:menuId/products',
+        element: <MenuProductsPage />
+      },
+      {
         path: '',
         element: <PrivateRoute />,
         children: [
