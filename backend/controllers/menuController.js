@@ -1,6 +1,7 @@
 
 import Menu from '../models/menu.model.js';
 import fs from 'fs';
+import Product from '../models/productModel.js'; // Assuming you have a Product model
 
 // Add a new menu item
 export const addMenu = async (req, res) => {
@@ -83,9 +84,30 @@ export const deleteMenu = async (req, res) => {
   }
 };
 
+
+// Function to get a menu and its associated products
+export const getMenuWithProducts = async (req, res) => {
+  try {
+    const menuId = req.params.id;  // Get the menu ID from the request parameters
+
+    // Find the menu by ID and populate the 'products' field
+    const menu = await Menu.findById(menuId).populate('products'); 
+
+    if (!menu) {
+      return res.status(404).json({ message: 'Menu not found' });
+    }
+
+    res.json(menu);  // Send the menu with populated product details
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 export default {
   addMenu,
   getMenus,
   editMenu,
-  deleteMenu
+  deleteMenu,
+  getMenuWithProducts
 };

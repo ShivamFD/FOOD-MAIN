@@ -469,8 +469,8 @@ const Menu= ({ menu }) => {
 
   return (
     <Card onClick={() => navigate(`/menu/${menu._id}`)}>
-      <Image src={menu.image || "/placeholder.jpg"} alt={menu.name} />
-      <Title>{menu.name}</Title>
+      <Image src={menu?.image || "/placeholder.jpg"} alt={menu?.name} />
+      <Title>{menu?.name}</Title>
     </Card>
   );
 };

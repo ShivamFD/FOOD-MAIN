@@ -28,7 +28,7 @@
 
 import express from 'express';
 import multer from 'multer';
-import { addMenu, getMenus, editMenu, deleteMenu } from '../controllers/menuController.js';
+import { addMenu, getMenus, editMenu, deleteMenu , getMenuWithProducts } from '../controllers/menuController.js';
 
 const router = express.Router();
 
@@ -59,5 +59,6 @@ router.post('/add-menu', upload.single('image'), addMenu);  // Upload single ima
 router.get('/menus', getMenus);
 router.put('/edit-menu/:id', upload.single('image'), editMenu);  // Upload single image for editing
 router.delete('/delete-menu/:id', deleteMenu);
+router.get('/menu/:id', getMenuWithProducts);  // Get menu with products
 
 export default router;

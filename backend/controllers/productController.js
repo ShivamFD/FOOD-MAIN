@@ -248,7 +248,7 @@ import Menu from '../models/menu.model.js';
 // @access   Public
 const getProducts = async (req, res, next) => {
   try {
-    const { limit, skip, search, category, priceRange } = req.query;
+    const { limit, skip, search,  priceRange } = req.query;
 
     // Build the filter object
     const filter = {};
@@ -278,6 +278,8 @@ const getProducts = async (req, res, next) => {
     next(error);
   }
 };
+
+
 
 
 
