@@ -29,6 +29,8 @@ import AdminListPage from '../pages/admin/AdminListPage';
 import ResetPasswordRequestPage from '../pages/ResetPasswordRequestPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import MenuManagementPage from '../pages/admin/MenuManagementPage';
+import MenuPage from '../pages/MenuPage';
+import MenuProductsPage from '../pages/MenuProductsPage';
 
 
 const router = createBrowserRouter([
