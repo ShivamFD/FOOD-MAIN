@@ -6,18 +6,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Menu from './components/Menu';
+import MenuProductsPage from './pages/MenuProductsPage';
 
 const App = () => {
   return (
     <div className='position-relative'>
-      <Header/>
+     
       <main>
         <Container>
           <Outlet />
-          <Menu />
+          
         </Container>
       </main>
-      <Footer />
+      
       <ToastContainer autoClose={1000} />
     </div>
   );

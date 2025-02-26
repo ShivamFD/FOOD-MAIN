@@ -29,8 +29,8 @@ import AdminListPage from '../pages/admin/AdminListPage';
 import ResetPasswordRequestPage from '../pages/ResetPasswordRequestPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 import MenuManagementPage from '../pages/admin/MenuManagementPage';
-import MenuPage from '../pages/MenuPage';
 import MenuProductsPage from '../pages/MenuProductsPage';
+import Menu from '../Menu'
 
 
 const router = createBrowserRouter([
@@ -67,13 +67,24 @@ const router = createBrowserRouter([
         path: '/register',
         element: <RegisterPage />
       },
-      {
-        path: '/menu',
-        element: <MenuPage />
-      },
+      // {
+      //   path: '/menu',
+      //   element: <MenuPage />
+      // },
       {
         path: '/menu/:menuId/products',
         element: <MenuProductsPage />
+      },
+      {
+         path:"/" ,
+         element:<Menu />,
+         children:[
+          {
+ path: "/menu/:category",
+ element: <MenuProductsPage />
+          }
+         ]
+        
       },
       {
         path: '',
