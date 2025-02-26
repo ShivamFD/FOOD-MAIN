@@ -1,54 +1,56 @@
+
+
 import Product from '../models/productModel.js';
 import { deleteFile } from '../utils/file.js';
+import mongoose from 'mongoose';
+import Menu from '../models/menu.model.js';
 
-// @desc     Fetch All Products
+// @desc     Fetch All Products with Advanced Filtering
 // @method   GET
-// @endpoint /api/v1/products?limit=2&skip=0
+// @endpoint /api/v1/products
 // @access   Public
 const getProducts = async (req, res, next) => {
   try {
-    const total = await Product.countDocuments();
-    const maxLimit = process.env.PAGINATION_MAX_LIMIT;
-    const maxSkip = total === 0 ? 0 : total - 1;
-    const limit = Number(req.query.limit) || maxLimit;
-    const skip = Number(req.query.skip) || 0;
-    const search = req.query.search || '';
+    const { limit, skip, search, category, priceRange } = req.query;
 
-    const products = await Product.find({
-      name: { $regex: search, $options: 'i' }
-    })
-      .limit(limit > maxLimit ? maxLimit : limit)
-      .skip(skip > maxSkip ? maxSkip : skip < 0 ? 0 : skip);
+    // Build the filter object
+    const filter = {};
+    if (search) filter.name = { $regex: search, $options: 'i' };
+    if (priceRange) {
+      const [minPrice, maxPrice] = priceRange.split('-').map(Number);
+      filter.price = { $gte: minPrice || 0, $lte: maxPrice || Infinity };
+    }
 
-    if (!products || products.length === 0) {
-      res.statusCode = 404;
-      throw new Error('Products not found!');
+    const total = await Product.countDocuments(filter);
+    
+    const products = await Product.find(filter)
+      .populate('menu', 'name description')  // Populate Menu Data
+      .limit(Number(limit) || 10)
+      .skip(Number(skip) || 0);
+
+    if (!products.length) {
+      return res.status(404).json({ message: 'No products found!' });
     }
 
     res.status(200).json({
       products,
-      total,
-      maxLimit,
-      maxSkip
+      totalPages: Math.ceil(total / (limit || 10)),
+      totalProducts: total,
     });
   } catch (error) {
     next(error);
   }
 };
 
-// @desc     Fetch top products
+
+
+// @desc     Fetch top-rated products
 // @method   GET
 // @endpoint /api/v1/products/top
 // @access   Public
 const getTopProducts = async (req, res, next) => {
   try {
-    const products = await Product.find({}).sort({ rating: -1 }).limit(3);
-
-    if (!products) {
-      res.statusCode = 404;
-      throw new Error('Product not found!');
-    }
-
+    const products = await Product.find().sort({ rating: -1 }).limit(3); // Fetch the top 3 products based on rating
     res.status(200).json(products);
   } catch (error) {
     next(error);
@@ -61,80 +63,210 @@ const getTopProducts = async (req, res, next) => {
 // @access   Public
 const getProduct = async (req, res, next) => {
   try {
-    const { id: productId } = req.params;
-    const product = await Product.findById(productId);
+    const product = await Product.findById(req.params.id).populate('menu', 'name description'); // Populate Menu Data
 
     if (!product) {
-      res.statusCode = 404;
-      throw new Error('Product not found!');
+      return res.status(404).json({ message: 'Product not found!' });
     }
-
     res.status(200).json(product);
   } catch (error) {
     next(error);
   }
 };
 
-// @desc     Create product
+// @desc     Create Product
 // @method   POST
 // @endpoint /api/v1/products
 // @access   Private/Admin
+// const createProduct = async (req, res, next) => {
+//   try {
+//     const { name, image, description, price, countInStock, menuId } = req.body;
+//     const menu = await Menu.findById(menuId);
+//     // Ensure that the menuIdis provided
+//     if (!menuId) {
+//       return res.status(400).json({ message: 'Menu name is required!' });
+//     }
+
+//     // ✅ Menu ka naam se ID dhundh ke store karna
+//     // const menu = await Menu.findOne({ name: menuId});
+//     if (!menu) {
+//       return res.status(404).json({ message: 'Menu not found!' });
+//     }
+
+//     const product = new Product({
+//       user: req.user._id,
+//       name,
+//       image,
+//       description,
+//       price,
+//       countInStock,
+//       menu: menuId,  // Store only Menu ID
+//     });
+
+//     // ✅ Menu ke `products` array me yeh product add karega
+//     menu.products.push(product._id);
+//     await menu.save();
+
+//     const createdProduct = await product.save();
+//     res.status(201).json({ message: 'Product created', createdProduct });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
+// const createProduct = async (req, res, next) => {
+//   try {
+//     // Destructure the fields from the request body
+//     const { name, image, description, price, countInStock, menuId } = req.body;
+
+//     // Check if menuId is provided
+//     if (!menuId) {
+//       return res.status(400).json({ message: 'Menu ID is required!' });
+//     }
+
+//     // Find the menu by the provided menuId
+//     const menu = await Menu.findById(menuId);
+
+//     // If the menu is not found, return a 404 error
+//     if (!menu) {
+//       return res.status(404).json({ message: 'Menu not found!' });
+//     }
+
+//     // Create a new product using the provided data
+//     const product = new Product({
+//       user: req.user._id, // Assuming the logged-in user's ID
+//       name,
+//       image,
+//       description,
+//       price,
+//       countInStock,
+//       menu: menu.Id,  // Store only Menu ID in the Product schema
+//     });
+
+//     // Add the product's ID to the menu's products array
+//     menu.products.push(product._id);
+//     await menu.save(); // Save the updated menu
+
+//     // Save the newly created product
+//     const createdProduct = await product.save();
+
+//     // Respond with the created product and a success message
+//     res.status(201).json({ message: 'Product created', createdProduct });
+//   } catch (error) {
+//     // Catch and forward errors to the error handling middleware
+//     next(error);
+//   }
+// };
+
+
 const createProduct = async (req, res, next) => {
   try {
-    const { name, image, description, brand, category, price, countInStock } =
-      req.body;
-    console.log(req.file);
+    const { name, image, description, price, countInStock, menuId, menuName } = req.body;
+
+    // Check if all required fields are provided
+    if (!name || !image || !description || !price || !countInStock) {
+      return res.status(400).json({ message: 'All product fields are required!' });
+    }
+
+    let menu;
+
+    // If menuId is provided, check if it's a valid ObjectId and use it
+    if (menuId) {
+      if (!mongoose.Types.ObjectId.isValid(menuId)) {
+        return res.status(400).json({ message: 'Invalid menuId format!' });
+      }
+
+      // Fetch the menu using the menuId
+      menu = await Menu.findById(menuId);
+
+      // Ensure menu exists before proceeding
+      if (!menu) {
+        return res.status(404).json({ message: 'Menu not found!' });
+      }
+    }
+    // If menuId is not provided, search by menuName
+    else if (menuName) {
+      // Ensure that the menuName passed is being queried against the "name" field in Menu.
+      menu = await Menu.findOne({ name: menuName });
+
+      // Ensure menu exists before proceeding
+      if (!menu) {
+        return res.status(404).json({ message: 'Menu not found!' });
+      }
+    } else {
+      return res.status(400).json({ message: 'Menu ID or Menu Name is required!' });
+    }
+
+    // Create a new product
     const product = new Product({
-      user: req.user._id,
+      user: req.user?._id, // Assuming the logged-in user's ID
       name,
       image,
       description,
-      brand,
-      category,
       price,
-      countInStock
+      countInStock,
+      menu: menu._id,  // Store the menu ID in the Product schema
     });
+
+    // Add the product's ID to the menu's products array
+    menu.products.push(product._id);
+    await menu.save(); // Save the updated menu
+
+    // Save the new product
     const createdProduct = await product.save();
 
-    res.status(200).json({ message: 'Product created', createdProduct });
+    // Now populate the menu data when sending the response
+    const populatedProduct = await Product.findById(createdProduct._id).populate('menu', 'name description');
+
+    res.status(201).json({ message: 'Product created successfully', populatedProduct });
+
   } catch (error) {
-    next(error);
+    console.error(error); // Log the error for internal debugging
+
+    // Check if error is related to a validation issue or database problem
+    if (error.name === 'ValidationError' || error instanceof mongoose.Error) {
+      return res.status(400).json({ message: 'Validation error', error: error.message });
+    }
+
+    // Handle generic internal server errors
+    return res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
 
-// @desc     Update product
+
+
+
+
+// @desc     Update Product
 // @method   PUT
 // @endpoint /api/v1/products/:id
 // @access   Private/Admin
 const updateProduct = async (req, res, next) => {
   try {
-    const { name, image, description, brand, category, price, countInStock } =
-      req.body;
+    const { name, image, description, price, countInStock, menuId} = req.body;
 
     const product = await Product.findById(req.params.id);
-
     if (!product) {
-      res.statusCode = 404;
-      throw new Error('Product not found!');
+      return res.status(404).json({ message: 'Product not found!' });
     }
 
-    // Save the current image path before updating
-    const previousImage = product.image;
+    // ✅ Agar naya menuIddiya hai to ID dhundho
+    if (menuId) {
+      const menu = await Menu.findOne({ name: menuId});
+      if (!menu) {
+        return res.status(404).json({ message: 'Menu not found!' });
+      }
+      product.menu = menu._id;
+    }
 
     product.name = name || product.name;
     product.image = image || product.image;
     product.description = description || product.description;
-    product.brand = brand || product.brand;
-    product.category = category || product.category;
     product.price = price || product.price;
     product.countInStock = countInStock || product.countInStock;
 
     const updatedProduct = await product.save();
-
-    // Delete the previous image if it exists and if it's different from the new image
-    if (previousImage && previousImage !== updatedProduct.image) {
-      deleteFile(previousImage);
-    }
 
     res.status(200).json({ message: 'Product updated', updatedProduct });
   } catch (error) {
@@ -142,21 +274,19 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Delete product
+// @desc     Delete Product
 // @method   DELETE
 // @endpoint /api/v1/products/:id
-// @access   Admin
+// @access   Private/Admin
 const deleteProduct = async (req, res, next) => {
   try {
-    const { id: productId } = req.params;
-    const product = await Product.findById(productId);
-
+    const product = await Product.findById(req.params.id);
     if (!product) {
-      res.statusCode = 404;
-      throw new Error('Product not found!');
+      return res.status(404).json({ message: 'Product not found!' });
     }
+
     await Product.deleteOne({ _id: product._id });
-    deleteFile(product.image); // Remove upload file
+    deleteFile(product.image);
 
     res.status(200).json({ message: 'Product deleted' });
   } catch (error) {
@@ -164,50 +294,49 @@ const deleteProduct = async (req, res, next) => {
   }
 };
 
-// @desc    Create product review
+// @desc     Create Product Review
 // @method   POST
-// @endpoint /api/v1/products/reviews/:id
-// @access   Admin
-const createProductReview = async (req, res, next) => {
+// @endpoint /api/v1/products/:id/reviews
+// @access   Private
+const createProductReview = async (req, res) => {
   try {
     const { id: productId } = req.params;
     const { rating, comment } = req.body;
+    const userId = req.user._id;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: "Invalid Product ID" });
+    }
 
     const product = await Product.findById(productId);
 
     if (!product) {
-      res.statusCode = 404;
-      throw new Error('Product not found!');
+      return res.status(404).json({ message: 'Product not found!' });
     }
 
-    const alreadyReviewed = product.reviews.find(
-      review => review.user._id.toString() === req.user._id.toString()
-    );
+    const existingReview = product.reviews.find((review) => review.user.toString() === userId.toString());
 
-    if (alreadyReviewed) {
-      res.statusCode = 400;
-      throw new Error('Product already reviewed');
+    if (existingReview) {
+      existingReview.rating = rating;
+      existingReview.comment = comment;
+    } else {
+      const newReview = {
+        user: userId,
+        name: req.user.name,
+        rating: Number(rating),
+        comment,
+      };
+      product.reviews.push(newReview);
     }
 
-    const review = {
-      user: req.user,
-      name: req.user.name,
-      rating: Number(rating),
-      comment
-    };
-
-    product.reviews = [...product.reviews, review];
-
-    product.rating =
-      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
-      product.reviews.length;
     product.numReviews = product.reviews.length;
+    product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.numReviews;
 
     await product.save();
+    res.status(200).json({ message: "Review added successfully" });
 
-    res.status(201).json({ message: 'Review added' });
   } catch (error) {
-    next(error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 };
 

@@ -1,233 +1,8 @@
-  // import React, { useEffect, useState } from 'react';
-  // import { Link, useNavigate, useParams } from 'react-router-dom';
-  // import { Button, Form } from 'react-bootstrap';
-  // import { toast } from 'react-toastify';
-  // import {
-  //   useCreateProductMutation,
-  //   useGetProductDetailsQuery,
-  //   useUpdateProductMutation,
-  //   useUploadProductImageMutation
-  // } from '../../slices/productsApiSlice';
-  // import FormContainer from '../../components/FormContainer';
-  // import Loader from '../../components/Loader';
-  // import Message from '../../components/Message';
-  // import Meta from '../../components/Meta';
-  
-  // const ProductFormPage = () => {
-  //   const { id: productId } = useParams();
-  
-  //   const isUpdateMode = !!productId;
-  
-  //   const [name, setName] = useState('');
-  //   const [image, setImage] = useState('');
-  //   const [description, setDescription] = useState('');
-  //   const [brand, setBrand] = useState('');
-  //   const [category, setCategory] = useState('');
-  //   const [price, setPrice] = useState(0);
-  //   const [countInStock, setCountInStock] = useState(0);
-  
-  //   const categories = ['Mens Footwear', 'Womens Footwear', 'Kids Footwear', 'Sports Footwear'];
-  //   const brands = ['Puma', 'Nike', 'Adidas', 'Croma', 'Campus'];
-  
-  //   const getProductQueryResult = useGetProductDetailsQuery(productId);
-  
-  //   const {
-  //     data: product,
-  //     isLoading,
-  //     error
-  //   } = isUpdateMode
-  //     ? getProductQueryResult
-  //     : { data: null, isLoading: false, error: null };
-  
-  //   const [createProduct, { isLoading: isCreateProductLoading }] =
-  //     useCreateProductMutation();
-  //   const [updateProduct, { isLoading: isUpdateProductLoading }] =
-  //     useUpdateProductMutation();
-  //   const [uploadProductImage, { isLoading: isUploadImageLoading }] =
-  //     useUploadProductImageMutation();
-  
-  //   const navigate = useNavigate();
-  
-  //   useEffect(() => {
-  //     if (isUpdateMode && product) {
-  //       setName(product.name);
-  //       setImage(product.image);
-  //       setDescription(product.description);
-  //       setBrand(product.brand);
-  //       setCategory(product.category);
-  //       setPrice(product.price);
-  //       setCountInStock(product.countInStock);
-  //     }
-  //   }, [isUpdateMode, product]);
-  
-  //   const uploadFileHandler = async e => {
-  //     const formData = new FormData();
-  //     formData.append('image', e.target.files[0]);
-  //     try {
-  //       const res = await uploadProductImage(formData).unwrap();
-  //       setImage(res.imageUrl);
-  //       toast.success(res.message);
-  //     } catch (error) {
-  //       toast.error(error?.data?.message || error.error);
-  //     }
-  //   };
-  
-  //   const submitHandler = async e => {
-  //     e.preventDefault();
-  //     try {
-  //       const productData = {
-  //         name,
-  //         image,
-  //         description,
-  //         brand,
-  //         category,
-  //         price,
-  //         countInStock
-  //       };
-  //       if (isUpdateMode) {
-  //         const { data } = await updateProduct({
-  //           productId,
-  //           ...productData
-  //         });
-  //         toast.success(data.message);
-  //       } else {
-  //         const { data } = await createProduct(productData);
-  
-  //         toast.success(data.message);
-  //       }
-  //       navigate('/admin/product-list');
-  //     } catch (error) {
-  //       toast.error(error?.data?.message || error.error);
-  //     }
-  //   };
-  
-  //   return (
-  //     <>
-  //       <Meta title={'Product Form'} />
-  //       <Link to='/admin/product-list' className='btn btn-light my-3'>
-  //         Go Back
-  //       </Link>
-  //       {(isUpdateProductLoading ||
-  //         isCreateProductLoading ||
-  //         isUploadImageLoading) && <Loader />}
-  //       {isLoading ? (
-  //         <Loader />
-  //       ) : error ? (
-  //         <Message variant='danger'>
-  //           {error?.data?.message || error.error}
-  //         </Message>
-  //       ) : (
-  //         <FormContainer>
-  //           <Meta title={'Product Form'} />
-  //           <h1>{isUpdateMode ? 'Update Product' : 'Create Product'}</h1>
-  //           <Form onSubmit={submitHandler}>
-  //             <Form.Group controlId='name'>
-  //               <Form.Label>Name</Form.Label>
-  //               <Form.Control
-  //                 type='name'
-  //                 placeholder='Enter name'
-  //                 value={name}
-  //                 onChange={e => setName(e.target.value)}
-  //               ></Form.Control>
-  //             </Form.Group>
-  
-  //             <Form.Group controlId='price'>
-  //               <Form.Label>Price</Form.Label>
-  //               <Form.Control
-  //                 type='number'
-  //                 placeholder='Enter price'
-  //                 value={price}
-  //                 onChange={e => setPrice(e.target.value)}
-  //               ></Form.Control>
-  //             </Form.Group>
-  
-  //             <Form.Group controlId='image'>
-  //               <Form.Label>Image</Form.Label>
-  //               <Form.Control
-  //                 type='file'
-  //                 onChange={uploadFileHandler}
-  //               ></Form.Control>
-  //             </Form.Group>
-  
-  //             <Form.Group controlId='brand'>
-  //               <Form.Label>Brand</Form.Label>
-  //               <Form.Control
-  //                 as='select'
-  //                 value={brand}
-  //                 onChange={e => setBrand(e.target.value)}
-  //               >
-  //                 <option value=''>Select Brand</option>
-  //                 {brands.map((brand, index) => (
-  //                   <option key={index} value={brand}>
-  //                     {brand}
-  //                   </option>
-  //                 ))}
-  //               </Form.Control>
-  //             </Form.Group>
-  
-  //             <Form.Group controlId='countInStock'>
-  //               <Form.Label>Count In Stock</Form.Label>
-  //               <Form.Control
-  //                 type='number'
-  //                 placeholder='Enter countInStock'
-  //                 value={countInStock}
-  //                 onChange={e => setCountInStock(e.target.value)}
-  //               ></Form.Control>
-  //             </Form.Group>
-  
-  //             <Form.Group controlId='category'>
-  //               <Form.Label>Category</Form.Label>
-  //               <Form.Control
-  //                 as='select'
-  //                 value={category}
-  //                 onChange={e => setCategory(e.target.value)}
-  //               >
-  //                 <option value=''>Select Category</option>
-  //                 {categories.map((category, index) => (
-  //                   <option key={index} value={category}>
-  //                     {category}
-  //                   </option>
-  //                 ))}
-  //               </Form.Control>
-  //             </Form.Group>
-  
-  //             <Form.Group controlId='description'>
-  //               <Form.Label>Description</Form.Label>
-  //               <Form.Control
-  //                 as='textarea'
-  //                 rows={3}
-  //                 type='text'
-  //                 placeholder='Enter description'
-  //                 value={description}
-  //                 onChange={e => setDescription(e.target.value)}
-  //               ></Form.Control>
-  //             </Form.Group>
-  
-  //             <Button
-  //               type='submit'
-  //               variant='primary'
-  //               style={{ marginTop: '1rem' }}
-  //             >
-  //               {isUpdateMode ? 'Update Product' : 'Create Product'}
-  //             </Button>
-  //           </Form>
-  //         </FormContainer>
-  //       )}
-  //     </>
-  //   );
-  // };
-  
-  // export default ProductFormPage;
-  import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import {
-  useCreateProductMutation,
-  useGetProductDetailsQuery,
-  useUpdateProductMutation,
-  useUploadProductImageMutation
-} from '../../slices/productsApiSlice';
+import { useCreateProductMutation, useGetProductDetailsQuery, useUpdateProductMutation, useUploadProductImageMutation, useGetMenusQuery } from '../../slices/productsApiSlice';
 import FormContainer from '../../components/FormContainer';
 import Loader from '../../components/Loader';
 import Message from '../../components/Message';
@@ -241,30 +16,16 @@ const ProductFormPage = () => {
   const [name, setName] = useState('');
   const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
-  const [brand, setBrand] = useState('');
-  const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
   const [countInStock, setCountInStock] = useState(0);
+  const [menuId, setMenuId] = useState(''); // State for menu selection
 
-  const categories = ['Mens Footwear', 'Womens Footwear', 'Kids Footwear', 'Sports Footwear'];
-  const brands = ['Puma', 'Nike', 'Adidas', 'Croma', 'Campus'];
+  const { data: product, isLoading: isProductLoading, error: productError } = useGetProductDetailsQuery(productId, { skip: !isUpdateMode });
+  const { data: menus, isLoading: isMenusLoading, error: menusError } = useGetMenusQuery(); // Fetch menus
 
-  const getProductQueryResult = useGetProductDetailsQuery(productId);
-
-  const {
-    data: product,
-    isLoading,
-    error
-  } = isUpdateMode
-    ? getProductQueryResult
-    : { data: null, isLoading: false, error: null };
-
-  const [createProduct, { isLoading: isCreateProductLoading }] =
-    useCreateProductMutation();
-  const [updateProduct, { isLoading: isUpdateProductLoading }] =
-    useUpdateProductMutation();
-  const [uploadProductImage, { isLoading: isUploadImageLoading }] =
-    useUploadProductImageMutation();
+  const [createProduct, { isLoading: isCreateProductLoading }] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isUpdateProductLoading }] = useUpdateProductMutation();
+  const [uploadProductImage, { isLoading: isUploadImageLoading }] = useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -273,10 +34,9 @@ const ProductFormPage = () => {
       setName(product.name);
       setImage(product.image);
       setDescription(product.description);
-      setBrand(product.brand);
-      setCategory(product.category);
       setPrice(product.price);
       setCountInStock(product.countInStock);
+      setMenuId(product.menu._id); // Set the selected menu on update
     }
   }, [isUpdateMode, product]);
 
@@ -292,59 +52,56 @@ const ProductFormPage = () => {
     }
   };
 
-  const submitHandler = async e => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-
-    // 🔥 Validate price (it should not be empty or negative)
-    if (price === '' || Number(price) < 0) {
-      toast.error('Price must be 0 or higher.');
+  
+    if (price === "" || Number(price) < 0) {
+      toast.error("Price must be 0 or higher.");
       return;
     }
-
+  
+    const productData = {
+      name,
+      image,
+      description,
+      price: Number(price),
+      countInStock,
+      menuId: menuId || null,
+    };
+  
+    console.log("Submitting Product Data:", productData); // Debugging
+  
     try {
-      const productData = {
-        name,
-        image,
-        description,
-        brand,
-        category,
-        price: Number(price), // Convert string to number
-        countInStock
-      };
       if (isUpdateMode) {
-        const { data } = await updateProduct({
-          productId,
-          ...productData
-        });
+        const { data } = await updateProduct({ productId, ...productData });
+        console.log("Update Response:", data);
         toast.success(data.message);
       } else {
         const { data } = await createProduct(productData);
+        console.log("Create Response:", data);
         toast.success(data.message);
       }
-      navigate('/admin/product-list');
+      navigate("/admin/product-list");
     } catch (error) {
+      console.error("Product Save Error:", error);
       toast.error(error?.data?.message || error.error);
     }
   };
+  
 
   return (
     <>
-      <Meta title={'Product Form'} />
+      <Meta title={isUpdateMode ? 'Update Product' : 'Create Product'} />
       <Link to='/admin/product-list' className='btn btn-light my-3'>
         Go Back
       </Link>
-      {(isUpdateProductLoading ||
-        isCreateProductLoading ||
-        isUploadImageLoading) && <Loader />}
-      {isLoading ? (
+      {(isCreateProductLoading || isUpdateProductLoading || isUploadImageLoading) && <Loader />}
+      {isProductLoading ? (
         <Loader />
-      ) : error ? (
-        <Message variant='danger'>
-          {error?.data?.message || error.error}
-        </Message>
+      ) : productError ? (
+        <Message variant='danger'>{productError?.data?.message || productError.error}</Message>
       ) : (
         <FormContainer>
-          <Meta title={'Product Form'} />
           <h1>{isUpdateMode ? 'Update Product' : 'Create Product'}</h1>
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='name'>
@@ -381,22 +138,6 @@ const ProductFormPage = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='brand'>
-              <Form.Label>Brand</Form.Label>
-              <Form.Control
-                as='select'
-                value={brand}
-                onChange={e => setBrand(e.target.value)}
-              >
-                <option value=''>Select Brand</option>
-                {brands.map((brand, index) => (
-                  <option key={index} value={brand}>
-                    {brand}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-
             <Form.Group controlId='countInStock'>
               <Form.Label>Count In Stock</Form.Label>
               <Form.Control
@@ -407,17 +148,18 @@ const ProductFormPage = () => {
               ></Form.Control>
             </Form.Group>
 
-            <Form.Group controlId='category'>
-              <Form.Label>Category</Form.Label>
+            {/* Menu Selection */}
+            <Form.Group controlId='menuId'>
+              <Form.Label>Menu</Form.Label>
               <Form.Control
                 as='select'
-                value={category}
-                onChange={e => setCategory(e.target.value)}
+                value={menuId}
+                onChange={e => setMenuId(e.target.value)}
               >
-                <option value=''>Select Category</option>
-                {categories.map((category, index) => (
-                  <option key={index} value={category}>
-                    {category}
+                <option value=''>Select Menu</option>
+                {menus && menus.map((menu) => (
+                  <option key={menu._id} value={menu._id}>
+                    {menu.name}
                   </option>
                 ))}
               </Form.Control>

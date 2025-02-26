@@ -57,7 +57,7 @@ const upload = multer({ storage, fileFilter });
 // Routes
 router.post('/add-menu', upload.single('image'), addMenu);  // Upload single image
 router.get('/menus', getMenus);
-router.put('/edit-menu/id', upload.single('image'), editMenu);  // Upload single image for editing
+router.put('/edit-menu/:id', upload.single('image'), editMenu);  // Upload single image for editing
 router.delete('/delete-menu/:id', deleteMenu);
 
 export default router;

@@ -28,6 +28,8 @@ import AdminProfilePage from '../pages/admin/AdminProfilePage';
 import AdminListPage from '../pages/admin/AdminListPage';
 import ResetPasswordRequestPage from '../pages/ResetPasswordRequestPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
+import MenuManagementPage from '../pages/admin/MenuManagementPage';
+
 
 const router = createBrowserRouter([
   {
@@ -122,6 +124,11 @@ const router = createBrowserRouter([
           {
             path: '/admin/product/create',
             element: <ProductFormPage />
+
+          },
+          {
+            path: '/admin/menu-management',
+            element: <MenuManagementPage />
           },
           {
             path: '/admin/profile',

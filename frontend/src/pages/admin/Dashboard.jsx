@@ -77,8 +77,7 @@
 //   );
 // };
 
-// export default Dashboard;
-import React from 'react';
+// export default Dashboard;import React from 'react';
 import { FaStore, FaUsers, FaShoppingBag, FaWallet } from 'react-icons/fa';
 import styled from 'styled-components';
 
@@ -100,6 +99,7 @@ const DashboardContainer = styled.div`
   background: linear-gradient(135deg, #141e30, #243b55);
   min-height: 100vh;
   color: white;
+  padding-left: 5rem;
 `;
 
 const CardsRow = styled.div`
