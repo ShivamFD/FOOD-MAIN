@@ -1,31 +1,3 @@
-// import express from 'express';
-// import Menu from '../models/menu.model.js';
-
-// const router = express.Router();
-
-// router.post('/add-menu', async (req, res) => {
-//   try {
-//     const menu = new Menu(req.body);
-//     await menu.save();
-//     res.status(201).json(menu);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
-
-// router.get('/menus', async (req, res) => {
-//   try {
-//     const menus = await Menu.find();
-//     res.status(200).json(menus);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
-
-// export default router;
-
-
-
 
 import Menu from '../models/menu.model.js';
 import fs from 'fs';

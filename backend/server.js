@@ -10,11 +10,10 @@ import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
-import  MenuRoutes from './routes/MenuRoutes.js';
-
 import connectDB from './config/db.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
-
+import menuController from './controllers/menuController.js';
+import  MenuRoutes from './routes/MenuRoutes.js';
 const port = process.env.PORT || 5000;
 
 // Connect to MongoDB
@@ -28,16 +27,20 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const __dirname = path.resolve(); // Set {__dirname} to current working directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// const __dirname = path.resolve(); // Set {__dirname} to current working directory
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(), 'backend', 'uploads')));
+app.use('/uploads', express.static(path.join(process.cwd(),  'uploads')));
+
+
 
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/upload', uploadRoutes);
 app.use('/api/v1/payment', paymentRoutes);
+// app.use('/api/menu',userRoutes );
 app.use('/api/menu', MenuRoutes);  // Make sure the base route is correct
-
 //-------------------------------------
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '/frontend/build')));
@@ -55,6 +58,7 @@ if (process.env.NODE_ENV === 'production') {
 //-------------------------------------
 app.use(notFound);
 app.use(errorHandler);
+
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);

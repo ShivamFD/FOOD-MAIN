@@ -28,7 +28,7 @@
 
 import express from 'express';
 import multer from 'multer';
-import { addMenu, getMenus, editMenu, deleteMenu } from '../controllers/menu.controller.js';
+import { addMenu, getMenus, editMenu, deleteMenu } from '../controllers/menuController.js';
 
 const router = express.Router();
 
