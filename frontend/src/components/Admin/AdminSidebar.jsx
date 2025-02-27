@@ -22,7 +22,8 @@ import styled from 'styled-components';
 const SidebarContainer = styled.div`
   width: 250px;
   height: 100vh;
-  background: linear-gradient(to bottom, #1a1a2e, #16213e);
+  background: linear-gradient(to bottom, #e7400d, #ff6334, #000000);
+
   color: white;
   padding: 20px;
   position: fixed;
@@ -63,7 +64,7 @@ const SidebarLink = styled(Nav.Link)`
   transition: all 0.3s ease-in-out;
   
   &:hover {
-    background: #0f3460;
+    background: #2e2e2e;
     transform: translateX(5px);
   }
   
