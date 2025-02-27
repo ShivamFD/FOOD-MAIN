@@ -153,7 +153,7 @@ const RatingWrapper = styled.div`
   gap: 6px;
   padding: 8px 12px;
   border-radius: 12px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  /* box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15); */
   transition: all 0.3s ease-in-out;
   width: fit-content;
 
@@ -200,7 +200,7 @@ const Rating = ({ value, text }) => {
       <Star>{value >= 3 ? <FaStar /> : value >= 2.5 ? <FaStarHalfAlt /> : <FaRegStar />}</Star>
       <Star>{value >= 4 ? <FaStar /> : value >= 3.5 ? <FaStarHalfAlt /> : <FaRegStar />}</Star>
       <Star>{value >= 5 ? <FaStar /> : value >= 4.5 ? <FaStarHalfAlt /> : <FaRegStar />}</Star>
-      <RatingText>{text || 0} </RatingText>
+      <RatingText>{text } </RatingText>
     </RatingWrapper>
   );
 };

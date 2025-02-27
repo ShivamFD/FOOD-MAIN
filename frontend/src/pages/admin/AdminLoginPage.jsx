@@ -8,7 +8,6 @@ import { setCredentials } from '../../slices/authSlice';
 import { toast, ToastContainer } from 'react-toastify';
 import FormContainer from '../../components/FormContainer';
 import Meta from '../../components/Meta';
-import Footer from '../../components/Footer';
 import Loader from '../../components/Loader';
 
 const AdminLoginPage = () => {
@@ -104,7 +103,6 @@ const AdminLoginPage = () => {
           </Card>
         </FormContainer>
       </main>
-      <Footer />
     </>
   );
 };

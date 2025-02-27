@@ -11,7 +11,6 @@ import {
 import { ToastContainer } from 'react-toastify';
 import { Outlet } from 'react-router-dom';
 import AdminHeader from './components/Admin/AdminHeader';
-import Footer from './components/Footer';
 import { useSelector } from 'react-redux';
 import AdminSidebar from './components/Admin/AdminSidebar';
 
@@ -46,7 +45,6 @@ const AdminDashboard = () => {
           </Col>
         </Row>
       </Container>
-      <Footer />
       <ToastContainer autoClose={1000} />
     </div>
   );
