@@ -1,167 +1,198 @@
-// // src/pages/MenuProductsPage.jsx
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import axios from "axios";
-// import styled from "styled-components";
 
-// const MenuProductsPage = () => {
-//   const { menuId } = useParams();
-//   const [products, setProducts] = useState([]);
 
-//   useEffect(() => {
-//     const fetchProducts = async () => {
-//       try {
-//         const res = await axios.get(`http://localhost:5000/api/products?menuId=${menuId}`);
-//         setProducts(res.data);
-//       } catch (error) {
-//         console.error("Error fetching products:", error);
-//       }
-//     };
-//     fetchProducts();
-//   }, [menuId]);
 
-//   return (
-//     <Container>
-//       <h2>Menu Products</h2>
-//       <ProductGrid>
-//         {products.map((product) => (
-//           <ProductCard key={product._id}>
-//             <ProductImage src={product.image} alt={product.name} />
-//             <p>{product.name}</p>
-//             <p>${product.price}</p>
-//           </ProductCard>
-//         ))}
-//       </ProductGrid>
-//     </Container>
-//   );
-// };
-
-// // Styled Components
-// const Container = styled.div`
-//   padding: 20px;
-//   text-align: center;
-// `;
-
-// const ProductGrid = styled.div`
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 20px;
-//   justify-content: center;
-// `;
-
-// const ProductCard = styled.div`
-//   width: 150px;
-//   border-radius: 10px;
-//   padding: 10px;
-//   background: #f9f9f9;
-//   text-align: center;
-// `;
-
-// const ProductImage = styled.img`
-//   width: 100px;
-//   height: 100px;
-//   border-radius: 10px;
-//   object-fit: cover;
-// `;
-
-// export default MenuProductsPage;
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import { Row, Col, Button, Card } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../slices/cartSlice';
+import Rating from '../components/Rating';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
+import Meta from '../components/Meta';
+import { FaShoppingCart } from 'react-icons/fa';
 import { addCurrency } from '../utils/addCurrency';
 
 // Styled Components
 const MenuContainer = styled.div`
-  width: 100%;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: #333;
+  padding: 40px 20px;
+  min-height: 100vh;
 `;
 
-const MenuTitle = styled.h1`
-  font-size: 36px;
-  margin-bottom: 20px;
-  color: #222;
-`;
-
-const ProductGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 1200px;
-`;
-
-const ProductCard = styled.div`
+const ProductCard = styled(Card)`
+  border: none;
   background: #fff;
-  padding: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
   border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease;
+  cursor: pointer;
   text-align: center;
-  
+  position: relative;
+  height: 390px; /* Reduced height */
+
   &:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
   }
 `;
 
 const ProductImage = styled.img`
   width: 100%;
-  height: 180px;
+  height: 140px; /* Smaller image */
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
 `;
 
-const ProductName = styled.p`
-  font-size: 18px;
+const ProductTitle = styled.h5`
+  font-weight: bold;
+  color: #d35400;
+  margin-bottom: 4px;
+  font-size: 1rem;
+  white-space: nowrap;
+  /* overflow: hidden; */
+  text-overflow: ellipsis;
+`;
+
+const ProductDescription = styled.p`
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  padding-top: 1rem;
+  height: 20px; /* Fixed height */
+  /* overflow: hidden; */
+`;
+
+const RatingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  margin-bottom: 6px;
+
+  span {
+    margin-left: 4px;
+    color: #777;
+  }
+`;
+
+const PriceTag = styled.div`
+  font-size: 1.1rem;
   font-weight: bold;
   color: #222;
-  margin-top: 10px;
+  margin: 4px 0;
 `;
 
-const ProductPrice = styled.span`
-  font-size: 16px;
+const StyledButton = styled(Button)`
+  background-color: rgba(234, 104, 18, 0.81);
+  border: none;
+  font-size: 0.9rem;
   font-weight: bold;
-  color: #555;
+  padding: 8px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: #e65c00;
+    transform: scale(1.05);
+  }
+
+  svg {
+    margin-left: 6px;
+  }
 `;
 
 const MenuProductsPage = () => {
-  const { category } = useParams();
+  const { id } = useParams();
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const { userInfo } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:5000/api/v1/products?category=${category}`);
-        setProducts(response.data);
+        const response = await axios.get(`http://localhost:5000/api/menu/menu/${id}`);
+        if (response.data && Array.isArray(response.data.products)) {
+          setProducts(response.data.products);
+        } else {
+          setError('No products found for this menu.');
+        }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        setError('There was an error fetching the products.');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProducts();
-  }, [category]);
+    if (id) {
+      fetchProducts();
+    }
+  }, [id]);
+
+  const addToCartHandler = (product) => {
+    dispatch(addToCart({ ...product, qty: 1 }));
+    navigate('/cart');
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   return (
     <MenuContainer>
-      <MenuTitle>{category} Dishes</MenuTitle>
-      <ProductGrid>
-        {products.length > 0 ? (
-          products.map((product) => (
-            <ProductCard key={product._id}>
-              <ProductImage src={`http://localhost:5000/uploads/${product.image}`} alt={product.name} />
-              <ProductName>{product.name}</ProductName>
-              <ProductPrice>{addCurrency(product.price)}</ProductPrice>
-            </ProductCard>
-          ))
-        ) : (
-          <p>No products found for this category.</p>
-        )}
-      </ProductGrid>
+      <Meta title="Menu Products" description="List of products available in the menu" />
+
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <Message variant="danger">{error}</Message>
+      ) : (
+        <Row>
+          {products.length > 0 ? (
+            products.map((product) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                <ProductCard onClick={() => handleProductClick(product._id)}>
+                <ProductImage
+  src={`http://localhost:5000${product.image}`}
+  alt={product.name}
+/>
+
+
+                  <ProductTitle>{product.name}</ProductTitle>
+                  <RatingWrapper>
+                    <Rating value={product.rating} />
+                    <span>({product.numReviews})</span>
+                  </RatingWrapper>
+                  <ProductDescription>{product.description}</ProductDescription>
+                  <PriceTag>{addCurrency(product.price)}</PriceTag>
+
+                  <StyledButton
+                    disabled={product.countInStock === 0}
+                    onClick={() => addToCartHandler(product)}
+                  >
+                    Add To Cart <FaShoppingCart />
+                  </StyledButton>
+                </ProductCard>
+              </Col>
+            ))
+          ) : (
+            <Message variant="info">No products found for this menu.</Message>
+          )}
+        </Row>
+      )}
     </MenuContainer>
   );
 };
