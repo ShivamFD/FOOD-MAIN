@@ -31,6 +31,13 @@ import ResetPasswordPage from '../pages/ResetPasswordPage';
 import MenuManagementPage from '../pages/admin/MenuManagementPage';
 import MenuProductsPage from '../pages/MenuProductsPage';
 import Menu from '../Menu'
+import Footer from '../Footer'
+import TermsPage from '../pages/TermsPage';
+import ServicesPage from '../pages/ServicesPage';
+import FaqPage from '../pages/FaqPage';
+import DeliveryInfoPage from '../pages/DeliveryInfoPage';
+import AboutUsPage from '../pages/AboutUsPage';
+import PrivacyPage from '../pages/PrivacyPage';
 
 
 const router = createBrowserRouter([
@@ -85,6 +92,36 @@ const router = createBrowserRouter([
           }
          ]
         
+      },
+      {
+        path:'/',
+        element:<Footer />,
+        children:[
+          {
+            path:'/about',
+            element:<AboutUsPage />,
+          },
+          {
+            path:'/privacy',
+            element:<PrivacyPage />,
+          },
+          {
+            path:'/terms',
+            element:<TermsPage />,
+          },
+          {
+            path:'/services',
+            element:<ServicesPage />,
+          },
+          {
+            path:'/faq',
+            element:<FaqPage />,
+          },
+          {
+            path:'/delivery',
+            element:<DeliveryInfoPage />,
+          },
+        ]
       },
       {
         path: '',
