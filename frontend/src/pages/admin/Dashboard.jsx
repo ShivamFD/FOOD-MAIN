@@ -239,8 +239,11 @@ const DashboardCardContainer = styled.div`
 
   /* Hover effect for card */
   &:hover {
-    background-color: #ff7f32; /* Accent Color on Hover */
+    /* background-color: #ff7f32; Accent Color on Hover */
+    background: #ff63479a;
     color: #ffffff;
+    box-shadow: -22px 16px 30px #d46855;
+
   }
 `;
 

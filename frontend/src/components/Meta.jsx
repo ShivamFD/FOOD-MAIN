@@ -12,11 +12,11 @@ const Meta = ({ title, description, keywords }) => {
 };
 
 Meta.defaultProps = {
-  title: ' ShoeBiz | Buy Shoes Online',
+  title: ' Online Food Website | Buy Foods Online',
   description:
-    'Browse and buy the latest shoes  on our online store. Find great deals on Mens, Womens, and Kids FootWear. Fast shipping and secure payments.',
+    'Browse and buy the latest Foods on our online store. Find great deals on Foods. Fast shipping and secure payments.',
   keywords:
-    'Casual, Sports, Mens, Womens, online shopping, Brands Shoe'
+    'Burgers, Pizzas, soft Drinks, Milkshake, Cakes, '
 };
 
 export default Meta;
