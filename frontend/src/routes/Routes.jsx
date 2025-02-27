@@ -80,6 +80,7 @@ const router = createBrowserRouter([
       // },
       {
         path: '/menu/:menuId/products',
+
         element: <MenuProductsPage />
       },
       {
@@ -87,7 +88,7 @@ const router = createBrowserRouter([
          element:<Menu />,
          children:[
           {
- path: "/menu/:category",
+ path: "/menu/:id",
  element: <MenuProductsPage />
           }
          ]
