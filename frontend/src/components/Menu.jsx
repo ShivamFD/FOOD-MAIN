@@ -130,7 +130,7 @@ const MenuContainer = styled.div`
   justify-content: space-between;
   overflow: hidden;
   position: relative;
-  padding: 20px;
+  padding: 0px 20px 20px 20px ;
   background: #f8f9fa;
   border-radius: 12px;
 `;

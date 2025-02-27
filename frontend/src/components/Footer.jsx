@@ -1,125 +1,17 @@
-// // import React from 'react';
-// // import { Container, Row, Col } from 'react-bootstrap';
-
-// // const Footer = () => {
-// //   const currentYear = new Date().getFullYear();
-// //   return (
-// //     <Container>
-// //       <Row>
-// //         <Col className='text-center py-3'>MERN Shop &copy; {currentYear}</Col>
-// //       </Row>
-// //     </Container>
-// //   );
-// // };
-
-// // export default Footer;
-// import React from 'react';
-// import styled from 'styled-components';
-// const FooterWrapper = styled.footer`
-//    background: #ff5722;
-//    color: #fff;
-//   padding: 20px 0;
-//   text-align: center;
-// `;
-
-// const FooterContainer = styled.div`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-//   max-width: 1200px;
-//   margin: 0 auto;
-//   padding: 0 20px;
-// `;
-
-// const FooterLogo = styled.div`
-//   img {
-//     width: 150px;
-//   }
-// `;
-
-// const FooterLinks = styled.div`
-//   ul {
-//     list-style: none;
-//     padding: 0;
-//   }
-
-//   ul li {
-//     display: inline-block;
-//     margin-right: 15px;
-//   }
-
-//   ul li a {
-//     color: white;
-//     text-decoration: none;
-//     font-size: 14px;
-//   }
-
-//   ul li a:hover {
-//     text-decoration: underline;
-//   }
-// `;
-
-// const FooterSocial = styled.div`
-//   a {
-//     margin: 0 10px;
-//     color: white;
-//     text-decoration: none;
-//     font-size: 14px;
-//   }
-
-//   a:hover {
-//     color: #f39c12;
-//   }
-// `;
-
-// const FooterCredit = styled.p`
-//   margin-top: 20px;
-//   font-size: 14px;
-// `;
-
-
-// const Footer = () => {
-//   return (
-//     <FooterWrapper>
-//       <FooterContainer>
-//         <FooterLogo>
-//           <img src="logo.png" alt="Food Website Logo" />
-//         </FooterLogo>
-//         <FooterLinks>
-//           <ul>
-//             <li><a href="/about">About Us</a></li>
-//             <li><a href="/contact">Contact</a></li>
-//             <li><a href="/privacy">Privacy Policy</a></li>
-//             <li><a href="/terms">Terms and Conditions</a></li>
-//             <li><a href="/services">Services</a></li>
-//             <li><a href="/faq">FAQs</a></li>
-//             <li><a href="/delivery">Delivery Information</a></li>
-//           </ul>
-//         </FooterLinks>
-//         <FooterSocial>
-//           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
-//           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
-//           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-//         </FooterSocial>
-//       </FooterContainer>
-//       <FooterCredit>© 2025 Food Website. All Rights Reserved.</FooterCredit>
-//     </FooterWrapper>
-//   );
-// };
-
-// export default Footer;
 // import React from 'react';
 // import styled from 'styled-components';
 // import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'; // Importing React Icons
-// import AboutUsPage from '../pages/AboutUsPage';
+// import { Link } from 'react-router-dom'; // React Router's Link component
+// import Logo from '../assets/FooterLogo.png'
 
 // const FooterWrapper = styled.footer`
 //    background: #e7400d;
 //    color: #fff;
 //    font-weight: bold;
-//     font-size: 18px;
+//    font-size: 18px;
 //    padding: 20px 0;
 //    text-align: center;
+//    height: 14rem;
 // `;
 
 // const FooterContainer = styled.div`
@@ -129,6 +21,7 @@
 //   max-width: 1200px;
 //   margin: 0 auto;
 //   padding: 0 20px;
+//   height: 14rem;
 // `;
 
 // const FooterLogo = styled.div`
@@ -188,16 +81,18 @@
 //     <FooterWrapper>
 //       <FooterContainer>
 //         <FooterLogo>
-//           <img src="logo.png" alt="Food Website Logo" />
+//           <img src={Logo} alt="Food Website Logo" />
+//           <p>Foodie</p>
 //         </FooterLogo>
 //         <FooterLinks>
 //           <ul>
-//             <li><a href=" AboutUsPage">About Us</a></li>
-//             <li><a href="/privacy">Privacy Policy</a></li>
-//             <li><a href="/terms">Terms and Conditions</a></li>
-//             <li><a href="/services">Services</a></li>
-//             <li><a href="/faq">FAQs</a></li>
-//             <li><a href="/delivery">Delivery Information</a></li>
+//             {/* Footer Links updated to use React Router Link */}
+//             <li><Link to="/about">About Us</Link></li>
+//             <li><Link to="/privacy">Privacy Policy</Link></li>
+//             <li><Link to="/terms">Terms and Conditions</Link></li>
+//             <li><Link to="/services">Services</Link></li>
+//             <li><Link to="/faq">FAQs</Link></li>
+//             <li><Link to="/delivery">Delivery Information</Link></li>
 //           </ul>
 //         </FooterLinks>
 //         <FooterSocial>
@@ -222,6 +117,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa'; // Importing React Icons
 import { Link } from 'react-router-dom'; // React Router's Link component
+import Logo from '../assets/FooterLogo.png'
 
 const FooterWrapper = styled.footer`
    background: #e7400d;
@@ -230,6 +126,10 @@ const FooterWrapper = styled.footer`
    font-size: 18px;
    padding: 20px 0;
    text-align: center;
+   height: 12rem; /* Reduced height */
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
 `;
 
 const FooterContainer = styled.div`
@@ -239,11 +139,21 @@ const FooterContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  width: 100%;
+  flex-wrap: wrap; /* Allow items to wrap on small screens */
+  justify-content: space-around; /* Spread items across the space */
 `;
 
 const FooterLogo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   img {
-    width: 150px;
+    width: 120px; /* Reduced logo size */
+  }
+  p {
+    margin-top: 5px;
+    font-size: 20px; /* Font size for the website name */
   }
 `;
 
@@ -251,11 +161,16 @@ const FooterLinks = styled.div`
   ul {
     list-style: none;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* Allow links to wrap */
+    justify-content: center; /* Center the links */
+    margin: 0;
   }
 
   ul li {
     display: inline-block;
     margin-right: 15px;
+    margin-bottom: 10px; /* Space between links */
   }
 
   ul li a {
@@ -271,6 +186,10 @@ const FooterLinks = styled.div`
 `;
 
 const FooterSocial = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+
   a {
     margin: 0 10px;
     color: white;
@@ -289,7 +208,7 @@ const FooterSocial = styled.div`
 `;
 
 const FooterCredit = styled.p`
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 14px;
 `;
 
@@ -298,7 +217,7 @@ const Footer = () => {
     <FooterWrapper>
       <FooterContainer>
         <FooterLogo>
-          <img src="logo.png" alt="Food Website Logo" />
+          <img src={Logo} alt="Food Website Logo" />
         </FooterLogo>
         <FooterLinks>
           <ul>

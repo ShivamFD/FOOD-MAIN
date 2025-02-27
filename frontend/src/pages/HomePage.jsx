@@ -284,6 +284,7 @@ import Paginate from "../components/Paginate";
 import Meta from "../components/Meta";
 import BannerImg from '../assets/Banner.png'
 import styled, { keyframes } from "styled-components";
+import { FaPizzaSlice, FaHamburger, FaUtensils } from 'react-icons/fa';
 
 // Animations
 const fadeIn = keyframes`
@@ -299,6 +300,45 @@ const HomePageContainer = styled.div`
   animation: ${fadeIn} 0.8s ease-in-out;
 `;
 
+const HeaderWrapper = styled.div`
+  text-align: center;
+  padding: 50px 20px 20px 20px;
+  background-color: #fff3e6;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 3rem;
+`;
+
+const Title = styled.h1`
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #e7400d;
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;  /* Space between text and icon */
+
+  /* Add some responsive styling */
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Description = styled.p`
+  font-size: 1.1rem;
+  color: #555;
+  margin-top: 10px;
+  line-height: 1.6;
+`;
+
 const ProductsContainer = styled.div`
   flex: 1;
   padding: 20px;
@@ -308,7 +348,7 @@ const ProductsContainer = styled.div`
 
 const Center = styled.h2`
   text-align: center;
-  color: #6d4c41;
+  color: #cb3705;
   background: linear-gradient(135deg, #ffcc00, #fff);
   color: transparent;
   background-clip: text;
@@ -375,18 +415,18 @@ const HomePage = () => {
       ) : (
         <>
           <BannerContainer></BannerContainer>
-          
+          <HeaderWrapper>
+      <Title>
+        <IconWrapper>
+          <FaPizzaSlice size={30} />
+        </IconWrapper>
+        What are you craving today? 🍕
+      </Title>
+      <Description>
+        Whether it's a delicious pizza, a juicy burger, or something sweet, we've got you covered! Take a look at our menu and find your next craving. 😋
+      </Description>
+    </HeaderWrapper> 
           {!search && <Menu />}
-          <Meta />
-          <Center>Latest Products</Center>
-          <Row>
-            {data?.products?.slice(0, 8).map((product) => (
-              <Col key={product._id} sm={12} md={6} lg={3}>
-                <Product product={product} />
-              </Col>
-            ))}
-          </Row>
-
           <Center className="m-4">All Products</Center>
 
           <HomePageContainer>
@@ -395,7 +435,7 @@ const HomePage = () => {
               <Row>
                 {filteredProducts.length > 0 ? (
                   filteredProducts.map((product) => (
-                    <Col key={product._id} sm={12} md={6} lg={4}>
+                    <Col key={product._id} sm={12} md={4} lg={3}>
                       <Product product={product} />
                     </Col>
                   ))
