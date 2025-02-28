@@ -21,16 +21,16 @@ import { addCurrency } from '../utils/addCurrency';
 // import { RAZORPAY_URL } from '../constants';
 import styled from 'styled-components';
 const StyledButton = styled(Button)`
-  background: linear-gradient(135deg, #9500ffab, #fff);
+  background: linear-gradient(135deg, #ff5100ab, #fff);
   border: none;
-  color: #141e30;
+  color: #ffffff;
   padding: 10px 20px;
   text-decoration: none;
   border-radius: 8px;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background: linear-gradient(145deg, #fff,#795b8edc);
+    background: linear-gradient(145deg, #fff,#cf6a06dc);
     font-weight: bold;
   }
 

@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { FaAngleDoubleLeft, FaAngleLeft, FaAngleRight, FaAngleDoubleRight } from "react-icons/fa";
 
+// Styled Components
 const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -11,7 +12,6 @@ const PaginationContainer = styled.div`
   background: linear-gradient(135deg, #ff6600, #ff3300);
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin: 2rem 0;
 `;
 
 const PageButton = styled.button`
@@ -60,26 +60,45 @@ const IconWrapper = styled.span`
   }
 `;
 
+// Scroll to Top Function
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 950, // Adjust this to where your product section starts
+    behavior: "smooth",
+  });
+};
+
 const Paginate = ({ currentPage, totalPage, pageHandler }) => {
+  const handlePageChange = (page) => {
+    if (page !== currentPage) {
+      pageHandler(page);
+      scrollToTop();
+    }
+  };
+
   return (
     <PaginationContainer>
-      <IconWrapper onClick={() => pageHandler(1)} disabled={currentPage <= 1}>
+      <IconWrapper onClick={() => handlePageChange(1)} disabled={currentPage <= 1}>
         <FaAngleDoubleLeft />
       </IconWrapper>
-      <IconWrapper onClick={() => pageHandler(currentPage - 1)} disabled={currentPage <= 1}>
+      <IconWrapper onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage <= 1}>
         <FaAngleLeft />
       </IconWrapper>
 
       {[...Array(totalPage)].map((_, i) => (
-        <PageButton key={i} active={i + 1 === currentPage} onClick={() => pageHandler(i + 1)}>
+        <PageButton
+          key={i}
+          active={i + 1 === currentPage}
+          onClick={() => handlePageChange(i + 1)}
+        >
           {i + 1}
         </PageButton>
       ))}
 
-      <IconWrapper onClick={() => pageHandler(currentPage + 1)} disabled={currentPage >= totalPage}>
+      <IconWrapper onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage >= totalPage}>
         <FaAngleRight />
       </IconWrapper>
-      <IconWrapper onClick={() => pageHandler(totalPage)} disabled={currentPage >= totalPage}>
+      <IconWrapper onClick={() => handlePageChange(totalPage)} disabled={currentPage >= totalPage}>
         <FaAngleDoubleRight />
       </IconWrapper>
     </PaginationContainer>

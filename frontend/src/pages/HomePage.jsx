@@ -349,9 +349,8 @@ const ProductsContainer = styled.div`
 
 const Center = styled.h2`
   text-align: center;
-  color: #cb3705;
-  background: linear-gradient(135deg, #ffcc00, #fff);
-  color: transparent;
+  color: #d13400;
+  font-weight: bold;
   background-clip: text;
   -webkit-background-clip: text;
 `;

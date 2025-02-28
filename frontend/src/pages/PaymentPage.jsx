@@ -118,15 +118,16 @@ const FormSection = styled.div`
 
 const StyledButton = styled(Button)`
   width: 100%;
-  background: linear-gradient(135deg, #9500ffab, #fff);
+  background: linear-gradient(135deg, #ff7300ab, #fff);
   border: none;
-  color: #141e30;
+  color: #ffffff;
   padding: 10px 20px;
   border-radius: 8px;
   transition: background 0.3s ease;
 
   &:hover {
-    background: linear-gradient(145deg, #fff, #906fa7ab);
+    background: linear-gradient(145deg, #fff, #da6206ab);
+    font-weight: bold;
   }
 
   &:disabled {
