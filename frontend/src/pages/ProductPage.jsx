@@ -1033,7 +1033,7 @@ const ProductPage = () => {
           <Row>
             {/* Left Section - Product Details & Reviews */}
             <Col md={7}>
-              <Image src={product.image} alt={product.name} fluid />
+              <Image src={product.image} alt={product.name} fluid  style={{ width: 255, height: 220 }}  />
               <ProductTitle>{product.name}</ProductTitle>
               <Rating value={product.rating} text={`${product.numReviews} reviews`} />
               <ProductDescription>{product.description}</ProductDescription>

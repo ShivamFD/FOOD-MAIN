@@ -442,13 +442,13 @@ const MenuHeader = styled.h2`
 `;
 
 const ProductGrid = styled(Row)`
-  gap: 55px;
+  gap: 95px;
   justify-content: flex-start;
 `;
 
 const ProductCard = styled(Col)`
   background: #fff;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 280px; // Increased width for three cards per row
@@ -466,6 +466,8 @@ const ProductImage = styled.img`
   height: 210px; // Adjusted height proportionally for wider cards (180px * 300/250)
   object-fit: cover;
   border-bottom: 1px solid #e0e0e0;
+  border-radius: 10px;
+  margin-top: 10px;
 `;
 
 const ProductDetails = styled.div`
