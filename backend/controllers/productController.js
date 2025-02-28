@@ -262,7 +262,7 @@ const getProducts = async (req, res, next) => {
     
     const products = await Product.find(filter)
       .populate('menu', 'name description')  // Populate Menu Data
-      .limit(Number(limit) || 10)
+      .limit(Number(limit) || 1000)
       .skip(Number(skip) || 0);
 
     if (!products.length) {

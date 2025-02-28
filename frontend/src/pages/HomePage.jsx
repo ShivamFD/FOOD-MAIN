@@ -285,6 +285,7 @@ import Meta from "../components/Meta";
 import BannerImg from '../assets/Banner.png'
 import styled, { keyframes } from "styled-components";
 import { FaPizzaSlice, FaHamburger, FaUtensils } from 'react-icons/fa';
+/* import Footer from "../components/Footer"; */
 
 // Animations
 const fadeIn = keyframes`
@@ -435,7 +436,7 @@ const HomePage = () => {
               <Row>
                 {filteredProducts.length > 0 ? (
                   filteredProducts.map((product) => (
-                    <Col key={product._id} sm={12} md={4} lg={3}>
+                    <Col key={product._id} sm={12} md={6} lg={4}>
                       <Product product={product} />
                     </Col>
                   ))
@@ -445,10 +446,11 @@ const HomePage = () => {
               </Row>
             </ProductsContainer>
           </HomePageContainer>
-          
+         
     
         </>
       )}
+    
     </>
   );
 };
