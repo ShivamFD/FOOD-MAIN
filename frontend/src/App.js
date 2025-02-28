@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './components/Header';
 import ScrollToTop from './components/ScrollTop';
+import Footer from './components/Footer';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         </Container>
       </main>
       <ToastContainer autoClose={1000} />
+      <Footer/>
     </div>
   );
 };
