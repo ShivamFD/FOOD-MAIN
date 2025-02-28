@@ -9,6 +9,15 @@ import { toast, ToastContainer } from 'react-toastify';
 import FormContainer from '../../components/FormContainer';
 import Meta from '../../components/Meta';
 import Loader from '../../components/Loader';
+import styled from 'styled-components';
+const SubmitButton =styled.Button`
+color: white;
+background-color: #ff8c00;
+& :hover{
+  background-color: orange;
+  font-weight: bold;
+}
+`
 
 const AdminLoginPage = () => {
   const [email, setEmail] = useState('');
@@ -91,14 +100,14 @@ const AdminLoginPage = () => {
                   onChange={() => setRemember(!remember)}
                 />
               </Form.Group>
-              <Button
+              <SubmitButton
                 className='my-3 w-100'
                 variant='warning'
                 type='submit'
                 disabled={isLoading}
               >
                 Sign In
-              </Button>
+              </SubmitButton>
             </Form>
           </Card>
         </FormContainer>

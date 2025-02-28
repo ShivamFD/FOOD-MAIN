@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import AboutImage from '../assets/AboutUsBanner.png'
 
 const AboutUsWrapper = styled.section`
   background-color: #f4f4f4;
@@ -133,7 +134,7 @@ const AboutUs = () => {
           to offering quick and reliable delivery services. Whether you're looking for a hearty meal or a light snack,
           we've got you covered!
         </AboutUsDescription>
-        <AboutUsImage src="https://via.placeholder.com/600x400" alt="Food Image" />
+        <AboutUsImage src={AboutImage} alt="Food Image" />
         
         <AboutUsMission>
           <AboutUsMissionTitle>Our Mission</AboutUsMissionTitle>

@@ -11,7 +11,7 @@ import Loader from '../components/Loader';
 import Meta from '../components/Meta';
 import styled from 'styled-components';
 const StyledButton = styled(Button)`
-  background: linear-gradient(135deg, #9500ffab, #fff);
+  background: linear-gradient(135deg, #e88127ab, #fff);
   border: none;
   color: #141e30;
   padding: 10px 20px;
@@ -20,7 +20,7 @@ const StyledButton = styled(Button)`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background: linear-gradient(145deg, #fff,#906fa7ab);
+    background: linear-gradient(145deg, #fff,#e88127ab);
     font-weight: bold;
   }
 
