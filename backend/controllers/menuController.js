@@ -94,7 +94,7 @@ export const getMenuWithProducts = async (req, res) => {
     const menu = await Menu.findById(menuId).populate('products'); 
 
     if (!menu) {
-      return res.status(404).json({ message: 'Menu not found' });
+      return res.status(404).json({ message: ' not found' });
     }
 
     res.json(menu);  // Send the menu with populated product details

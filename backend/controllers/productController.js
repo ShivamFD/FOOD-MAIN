@@ -421,7 +421,7 @@ const createProduct = async (req, res, next) => {
 
       // Ensure menu exists before proceeding
       if (!menu) {
-        return res.status(404).json({ message: 'Menu not found!' });
+        return res.status(404).json({ message: 'Menu id not found!' });
       }
     }
     // If menuId is not provided, search by menuName
@@ -431,7 +431,7 @@ const createProduct = async (req, res, next) => {
 
       // Ensure menu exists before proceeding
       if (!menu) {
-        return res.status(404).json({ message: 'Menu not found!' });
+        return res.status(404).json({ message: 'Menu name not found!' });
       }
     } else {
       return res.status(400).json({ message: 'Menu ID or Menu Name is required!' });
@@ -481,37 +481,79 @@ const createProduct = async (req, res, next) => {
 // @method   PUT
 // @endpoint /api/v1/products/:id
 // @access   Private/Admin
+// const updateProduct = async (req, res, next) => {
+//   try {
+//     const { name, image, description, price, countInStock, menuId} = req.body;
+
+//     const product = await Product.findById(req.params.id);
+//     if (!product) {
+//       return res.status(404).json({ message: 'Product not found!' });
+//     }
+
+//     // ✅ Agar naya menuIddiya hai to ID dhundho
+//     if (menuId) {
+//       console.log( "menu id :" + menuId);
+//       const menu = await Menu.findOne({ name: menuId});
+//       if (!menu) {
+//         return res.status(404).json({ message: 'Menu id1 not found!' });
+//       }
+//       product.menu = menu._id;
+//     }
+
+//     product.name = name || product.name;
+//     product.image = image || product.image;
+//     product.description = description || product.description;
+//     product.price = price || product.price;
+//     product.countInStock = countInStock || product.countInStock;
+
+//     const updatedProduct = await product.save();
+
+//     res.status(200).json({ message: 'Product updated', updatedProduct });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 const updateProduct = async (req, res, next) => {
   try {
-    const { name, image, description, price, countInStock, menuId} = req.body;
+    const { name, image, description, price, countInStock, menuId } = req.body;
 
+    // Find the product by the provided product ID (using req.params.id)
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: 'Product not found!' });
     }
 
-    // ✅ Agar naya menuIddiya hai to ID dhundho
+    // If menuId is provided, check for a valid menu
     if (menuId) {
-      const menu = await Menu.findOne({ name: menuId});
+      console.log("menu id :", menuId);
+
+      // Validate menuId, assuming it's an ObjectId
+      const menu = await Menu.findById(menuId); // Use `findById` to search by ObjectId
       if (!menu) {
-        return res.status(404).json({ message: 'Menu not found!' });
+        return res.status(404).json({ message: 'Menu not found!' }); // Return error if menu not found
       }
+
+      // Assign the menu ID to the product's menu field
       product.menu = menu._id;
     }
 
+    // Update the product fields
     product.name = name || product.name;
     product.image = image || product.image;
     product.description = description || product.description;
     product.price = price || product.price;
     product.countInStock = countInStock || product.countInStock;
 
+    // Save the updated product
     const updatedProduct = await product.save();
 
+    // Send success response
     res.status(200).json({ message: 'Product updated', updatedProduct });
   } catch (error) {
-    next(error);
+    next(error); // Pass the error to the next middleware
   }
 };
+
 
 // @desc     Delete Product
 // @method   DELETE
