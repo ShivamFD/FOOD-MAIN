@@ -10,7 +10,7 @@ import FormContainer from '../../components/FormContainer';
 import Meta from '../../components/Meta';
 import Loader from '../../components/Loader';
 import styled from 'styled-components';
-const SubmitButton =styled.Button`
+const SubmitButton =styled.button`
 color: white;
 background-color: #ff8c00;
 & :hover{
