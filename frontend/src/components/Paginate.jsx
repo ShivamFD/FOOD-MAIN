@@ -12,6 +12,7 @@ const PaginationContainer = styled.div`
   background: linear-gradient(135deg, #ff6600, #ff3300);
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom:1.8rem;
 `;
 
 const PageButton = styled.button`
