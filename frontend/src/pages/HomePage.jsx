@@ -388,6 +388,7 @@ const HomePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const productsPerPage = 9; // Number of products per page
   
   const { search } = useSelector((state) => state.search);
   const { data, isLoading, error } = useGetProductsQuery({});
@@ -395,7 +396,6 @@ const HomePage = () => {
   // Effect to update filtered products based on the search
   useEffect(() => {
     if (data?.products) {
-      // Apply filters to products
       let filtered = data.products;
 
       // Category filter (if selected)
@@ -404,8 +404,25 @@ const HomePage = () => {
       }
 
       setFilteredProducts(filtered); // Update the filtered products state
+      setCurrentPage(1); // Reset to first page when filters change
     }
-  }, [data, selectedCategory, search]); // Re-run effect when data or selectedCategory changes
+  }, [data, selectedCategory, search]);
+
+  // Calculate total pages
+  const totalPage = Math.ceil(filteredProducts.length / productsPerPage);
+
+  // Slice the products for the current page
+  const displayedProducts = filteredProducts.slice(
+    (currentPage - 1) * productsPerPage,
+    currentPage * productsPerPage
+  );
+
+  // Pagination Handler
+  const pageHandler = (page) => {
+    if (page >= 1 && page <= totalPage) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <>
@@ -417,16 +434,17 @@ const HomePage = () => {
         <>
           <BannerContainer></BannerContainer>
           <HeaderWrapper>
-      <Title>
-        <IconWrapper>
-          <FaPizzaSlice size={30} />
-        </IconWrapper>
-        What are you craving today? 🍕
-      </Title>
-      <Description>
-        Whether it's a delicious pizza, a juicy burger, or something sweet, we've got you covered! Take a look at our menu and find your next craving. 😋
-      </Description>
-    </HeaderWrapper> 
+            <Title>
+              <IconWrapper>
+                <FaPizzaSlice size={30} />
+              </IconWrapper>
+              What are you craving today? 🍕
+            </Title>
+            <Description>
+              Whether it's a delicious pizza, a juicy burger, or something sweet, we've got you covered! Take a look at our menu and find your next craving. 😋
+            </Description>
+          </HeaderWrapper> 
+          
           {!search && <Menu />}
           <Center className="m-4">All Products</Center>
 
@@ -434,8 +452,8 @@ const HomePage = () => {
             {/* Products Section */}
             <ProductsContainer>
               <Row>
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
+                {displayedProducts.length > 0 ? (
+                  displayedProducts.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4}>
                       <Product product={product} />
                     </Col>
@@ -446,11 +464,17 @@ const HomePage = () => {
               </Row>
             </ProductsContainer>
           </HomePageContainer>
-         
-    
+
+          {/* Pagination Component */}
+          {totalPage > 1 && (
+            <Paginate
+              currentPage={currentPage}
+              totalPage={totalPage}
+              pageHandler={pageHandler}
+            />
+          )}
         </>
       )}
-    
     </>
   );
 };
