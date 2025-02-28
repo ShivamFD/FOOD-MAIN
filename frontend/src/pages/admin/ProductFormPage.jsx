@@ -55,6 +55,11 @@ const ProductFormPage = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
   
+    if (!productId && isUpdateMode) {
+      toast.error('Product ID is missing');
+      return;
+    }
+
     if (price === "" || Number(price) < 0) {
       toast.error("Price must be 0 or higher.");
       return;
